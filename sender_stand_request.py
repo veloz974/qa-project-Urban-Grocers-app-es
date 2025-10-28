@@ -1,19 +1,21 @@
-
 import requests
-from configuration import BASE_URL, CREATE_USER_PATH, KITS_PATH, TIMEOUT
+import data
+import configuration
 
-
+#### Función para crear un usuario
 def post_new_user(body):
-    """Crea un nuevo usuario y devuelve la respuesta completa."""
-    url = BASE_URL + CREATE_USER_PATH
-    response = requests.post(url, json=body, timeout=TIMEOUT)
-    return response
+    return requests.post(
+        configuration.BASE_URL + configuration.CREATE_USER_PATH,
+        json=body,
+        headers=data.headers
+    )
 
-
+#### Función para crear un kit asociado al usuario
 def post_new_client_kit(kit_body, auth_token):
-    """Crea un nuevo kit para un usuario usando su token."""
-    url = BASE_URL + KITS_PATH
-    headers = {"Authorization": f"Bearer {auth_token}"}
-    response = requests.post(url, headers=headers, json=kit_body, timeout=TIMEOUT)
-    return response
-
+    headers_dict = data.headers.copy()
+    headers_dict["Authorization"] = "Bearer " + auth_token
+    return requests.post(
+        configuration.BASE_URL + configuration.KITS_PATH,
+        json=kit_body,
+        headers=headers_dict
+    )
